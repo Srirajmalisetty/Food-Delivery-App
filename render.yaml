@@ -1,0 +1,138 @@
+# 🍕 Render Blueprint Infrastructure Map
+# Deploy the entire microservices stack with a single click using this blueprint!
+# Reference: https://render.com/docs/blueprints
+
+services:
+  # ----------------------------------------------------
+  # 🛡️ 1. API Gateway (Public Web Service)
+  # ----------------------------------------------------
+  - type: web
+    name: food-api-gateway
+    env: docker
+    dockerContext: .
+    dockerfilePath: backend/api-gateway/Dockerfile
+    plan: free
+    port: 8080
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: USER_SERVICE_URL
+        value: http://food-user-service:8081
+      - key: RESTAURANT_SERVICE_URL
+        value: http://food-restaurant-service:8082
+      - key: ORDER_SERVICE_URL
+        value: http://food-order-service:8083
+      - key: PAYMENT_SERVICE_URL
+        value: http://food-payment-service:8084
+
+  # ----------------------------------------------------
+  # 👤 2. User Service (Private Service)
+  # ----------------------------------------------------
+  - type: pserv
+    name: food-user-service
+    env: docker
+    dockerContext: .
+    dockerfilePath: backend/user-service/Dockerfile
+    plan: free
+    port: 8081
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mysql://YOUR_MYSQL_HOST:3306/db_user?useSSL=false&allowPublicKeyRetrieval=true
+      - key: SPRING_DATASOURCE_USERNAME
+        value: root
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: YOUR_MYSQL_PASSWORD
+
+  # ----------------------------------------------------
+  # 🍳 3. Restaurant Service (Private Service)
+  # ----------------------------------------------------
+  - type: pserv
+    name: food-restaurant-service
+    env: docker
+    dockerContext: .
+    dockerfilePath: backend/restaurant-service/Dockerfile
+    plan: free
+    port: 8082
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mysql://YOUR_MYSQL_HOST:3306/db_restaurant?useSSL=false&allowPublicKeyRetrieval=true
+      - key: SPRING_DATASOURCE_USERNAME
+        value: root
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: YOUR_MYSQL_PASSWORD
+
+  # ----------------------------------------------------
+  # 📦 4. Order Service (Private Service)
+  # ----------------------------------------------------
+  - type: pserv
+    name: food-order-service
+    env: docker
+    dockerContext: .
+    dockerfilePath: backend/order-service/Dockerfile
+    plan: free
+    port: 8083
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mysql://YOUR_MYSQL_HOST:3306/db_order?useSSL=false&allowPublicKeyRetrieval=true
+      - key: SPRING_DATASOURCE_USERNAME
+        value: root
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: YOUR_MYSQL_PASSWORD
+      - key: SPRING_REDIS_HOST
+        value: food-redis  # Reference to managed Redis below
+      - key: SPRING_REDIS_PORT
+        value: 6379
+      - key: SPRING_KAFKA_BOOTSTRAP_SERVERS
+        value: YOUR_KAFKA_BOOTSTRAP_SERVER
+
+  # ----------------------------------------------------
+  # 💳 5. Payment Service (Private Service)
+  # ----------------------------------------------------
+  - type: pserv
+    name: food-payment-service
+    env: docker
+    dockerContext: .
+    dockerfilePath: backend/payment-service/Dockerfile
+    plan: free
+    port: 8084
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mysql://YOUR_MYSQL_HOST:3306/db_payment?useSSL=false&allowPublicKeyRetrieval=true
+      - key: SPRING_DATASOURCE_USERNAME
+        value: root
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: YOUR_MYSQL_PASSWORD
+      - key: SPRING_KAFKA_BOOTSTRAP_SERVERS
+        value: YOUR_KAFKA_BOOTSTRAP_SERVER
+
+  # ----------------------------------------------------
+  # 🔔 6. Notification Service (Private Service)
+  # ----------------------------------------------------
+  - type: pserv
+    name: food-notification-service
+    env: docker
+    dockerContext: .
+    dockerfilePath: backend/notification-service/Dockerfile
+    plan: free
+    port: 8085
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_KAFKA_BOOTSTRAP_SERVERS
+        value: YOUR_KAFKA_BOOTSTRAP_SERVER
+
+# ----------------------------------------------------
+# ⚡ 7. Redis Cache (Managed Redis Service)
+# ----------------------------------------------------
+redis:
+  name: food-redis
+  plan: free
+  ipAllowList: [] # Allows access only within the Render internal network

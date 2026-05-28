@@ -1,9 +1,11 @@
 # Master GitIgnore for BiteDash Food Delivery App
 
 # Compiled Java Classes & Build Targets
-**/target/
+**/target/classes/
+**/target/maven-archiver/
+**/target/maven-status/
+**/target/generated-sources/
 **/*.class
-**/*.jar
 **/*.war
 **/*.ear
 
