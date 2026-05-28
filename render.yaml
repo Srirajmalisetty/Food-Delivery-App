@@ -9,8 +9,8 @@ services:
   - type: web
     name: food-api-gateway
     env: docker
-    dockerContext: .
-    dockerfilePath: backend/api-gateway/Dockerfile
+    dockerContext: backend/api-gateway
+    dockerfilePath: Dockerfile
     plan: free
     port: 8080
     envVars:
@@ -31,8 +31,8 @@ services:
   - type: pserv
     name: food-user-service
     env: docker
-    dockerContext: .
-    dockerfilePath: backend/user-service/Dockerfile
+    dockerContext: backend/user-service
+    dockerfilePath: Dockerfile
     plan: free
     port: 8081
     envVars:
@@ -51,8 +51,8 @@ services:
   - type: pserv
     name: food-restaurant-service
     env: docker
-    dockerContext: .
-    dockerfilePath: backend/restaurant-service/Dockerfile
+    dockerContext: backend/restaurant-service
+    dockerfilePath: Dockerfile
     plan: free
     port: 8082
     envVars:
@@ -71,8 +71,8 @@ services:
   - type: pserv
     name: food-order-service
     env: docker
-    dockerContext: .
-    dockerfilePath: backend/order-service/Dockerfile
+    dockerContext: backend/order-service
+    dockerfilePath: Dockerfile
     plan: free
     port: 8083
     envVars:
@@ -97,8 +97,8 @@ services:
   - type: pserv
     name: food-payment-service
     env: docker
-    dockerContext: .
-    dockerfilePath: backend/payment-service/Dockerfile
+    dockerContext: backend/payment-service
+    dockerfilePath: Dockerfile
     plan: free
     port: 8084
     envVars:
@@ -119,8 +119,8 @@ services:
   - type: pserv
     name: food-notification-service
     env: docker
-    dockerContext: .
-    dockerfilePath: backend/notification-service/Dockerfile
+    dockerContext: backend/notification-service
+    dockerfilePath: Dockerfile
     plan: free
     port: 8085
     envVars:
